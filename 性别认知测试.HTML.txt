@@ -1,0 +1,705 @@
+好的，我已在测试结果页面内按要求增加了免责声明和付费提醒。以下是完整代码，您可直接保存为 `.html` 文件使用。
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>小马宝莉 · 小男娘资质测试 · 专业版 · 24小时有效</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #fde9f0 0%, #ffe6f0 100%);
+            font-family: 'Comic Neue', 'Comic Neue', 'Segoe UI', 'Comic Sans MS', 'Chalkboard SE', 'Poppins', cursive, sans-serif;
+            padding: 30px 20px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .pony-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 245, 0.85);
+            border-radius: 1000px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(3px);
+        }
+
+        .rainbow {
+            position: absolute;
+            height: 12px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #ff77aa, #ffaa77, #ffff77, #77ff77, #77aaff, #c277ff);
+            opacity: 0.3;
+            transform: rotate(-5deg);
+        }
+
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: rgba(255, 252, 245, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 64px 48px 64px 48px;
+            box-shadow: 0 25px 45px rgba(192, 112, 148, 0.25), 0 0 0 3px #ffe0f0, 0 0 0 8px #ffc0dd;
+            padding: 30px 28px 45px;
+            position: relative;
+            z-index: 2;
+            transition: filter 0.2s;
+        }
+
+        .expired-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .expired-card {
+            background: #ffecf0;
+            color: #b34b6e;
+            padding: 40px 30px;
+            border-radius: 60px;
+            max-width: 90%;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+        }
+        .expired-card button {
+            margin-top: 20px;
+            background: #f29fbf;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #e06c9e, #ffac7a, #ffda7a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 10px #ffc0cb80;
+            display: inline-block;
+            padding: 0 12px;
+        }
+
+        .cutie-mark {
+            font-size: 3rem;
+            display: inline-block;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            margin: 0 10px;
+        }
+
+        .sub {
+            background: #ffecf0;
+            display: inline-block;
+            padding: 8px 28px;
+            border-radius: 60px;
+            color: #b34b6e;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 12px;
+        }
+
+        .desc {
+            text-align: center;
+            margin: 20px 0 12px;
+            color: #ad6a86;
+            font-weight: 500;
+            background: #fff0f5cc;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+
+        .progress-area {
+            margin: 10px 0 20px;
+            background: #ffdfe9;
+            border-radius: 60px;
+            padding: 5px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .progress-text {
+            font-weight: bold;
+            color: #b34b6e;
+            background: white;
+            padding: 4px 15px;
+            border-radius: 40px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 14px;
+            background: #ffc0d0;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #f8a5c2, #f2628c);
+            border-radius: 30px;
+            transition: width 0.2s ease;
+        }
+
+        .questions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 30px 0 30px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .questions-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        .questions-grid::-webkit-scrollbar-track {
+            background: #ffe0ea;
+            border-radius: 10px;
+        }
+        .questions-grid::-webkit-scrollbar-thumb {
+            background: #e9a2bd;
+            border-radius: 10px;
+        }
+
+        .q-card {
+            background: #fffafc;
+            border-radius: 40px;
+            padding: 18px 22px;
+            box-shadow: 0 6px 14px #ffd9e6;
+            border: 1px solid #ffe2ef;
+        }
+
+        .q-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #673147;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .q-num {
+            background: #ffb7cf;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .scale-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .scale-option {
+            flex: 1;
+            min-width: 70px;
+            background: #fef3f7;
+            border-radius: 60px;
+            text-align: center;
+            padding: 8px 4px;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid #fbc4d7;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #ad5e7e;
+        }
+
+        .scale-option.selected {
+            background: #e99ebc;
+            border-color: #c04e76;
+            color: white;
+            box-shadow: 0 4px 8px #d97e9f80;
+            transform: scale(0.97);
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            background: #ffe3ed;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 48px;
+            color: #b94b72;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 0 #d99eb9;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #f29fbf;
+            color: white;
+            box-shadow: 0 5px 0 #b64f74;
+        }
+
+        .btn-primary:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #b64f74;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #d99eb9;
+        }
+
+        .result-card {
+            background: #fff2f7dd;
+            border-radius: 48px;
+            padding: 22px 24px;
+            margin-top: 20px;
+            border: 2px solid #ffcce0;
+            backdrop-filter: blur(6px);
+        }
+
+        .result-title {
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #b53f6a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .spectrum {
+            font-size: 1.2rem;
+            background: #ffdee9;
+            padding: 12px 18px;
+            border-radius: 32px;
+            margin: 15px 0;
+        }
+
+        .result-desc {
+            line-height: 1.5;
+            color: #5e3a48;
+        }
+
+        .notice-box {
+            background: #fff0e0;
+            border-left: 6px solid #e99ebc;
+            border-radius: 28px;
+            padding: 16px 20px;
+            margin: 20px 0 10px;
+            font-size: 0.85rem;
+            color: #a55672;
+        }
+        .notice-box p {
+            margin: 8px 0;
+        }
+        .notice-box strong {
+            color: #b34b6e;
+        }
+
+        .disclaimer {
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 25px;
+            color: #c78aa8;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            margin-top: 20px;
+            color: #e6a6c0;
+        }
+
+        @media (max-width: 700px) {
+            .test-container {
+                padding: 20px 18px;
+            }
+            .scale-option {
+                font-size: 0.7rem;
+                min-width: 55px;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="pony-bg" id="ponyBg"></div>
+<div class="test-container" id="appContainer">
+    <div class="hero">
+        <span class="cutie-mark">🎀🦄</span>
+        <h1>小男娘资质测试 · 专业版</h1>
+        <span class="cutie-mark">🌈✨</span>
+        <div class="sub">马国性别探索学院 · 24小时内有效</div>
+    </div>
+    <div class="desc">
+        💖 本测试基于性别认同研究框架，聚焦“小男娘”倾向（生理男性，女性化认同/表达）。<br>
+        请根据您的真实感受选择，答案没有对错，每一份内心都值得被倾听 🌸
+    </div>
+
+    <div class="progress-area">
+        <span class="progress-text">✨ 探索进度</span>
+        <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="progress-text" id="answeredCount">0 / 28</span>
+    </div>
+
+    <div id="questionsContainer" class="questions-grid"></div>
+
+    <div class="action-buttons">
+        <button class="btn" id="resetBtn">🦄 重选所有答案</button>
+        <button class="btn btn-primary" id="submitBtn">🌟 看看我的小男娘指数</button>
+    </div>
+
+    <div id="resultArea" class="result-card" style="display: none;"></div>
+    <div class="disclaimer">
+        ⚡ 本测试结果基于自我报告，仅供自我探索与娱乐，不构成专业诊断。每个人都是独特的彩虹。
+        <br> 小男娘是一种可爱的身份认同，尊重每一种真实表达 💕
+    </div>
+    <footer>💖 献给所有喜欢粉色、裙子和魔法的小马们 💖</footer>
+</div>
+
+<script>
+    // ======================= 时效性检测模块 (24小时) =======================
+    const STORAGE_KEY = 'pony_test_start_time';
+    const EXPIRY_HOURS = 24;
+
+    function isTestExpired() {
+        const startTime = localStorage.getItem(STORAGE_KEY);
+        if (!startTime) {
+            const now = Date.now();
+            localStorage.setItem(STORAGE_KEY, now);
+            return false;
+        }
+        const elapsed = Date.now() - parseInt(startTime, 10);
+        const hoursPassed = elapsed / (1000 * 60 * 60);
+        return hoursPassed >= EXPIRY_HOURS;
+    }
+
+    function showExpiredOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'expired-overlay';
+        overlay.innerHTML = `
+            <div class="expired-card">
+                🌸 测试链接已过期 🌸<br><br>
+                本测评仅在首次访问后的24小时内有效。<br>
+                您已经超过了使用时限。<br>
+                <button onclick="location.reload()">尝试重新加载</button>
+                <p style="font-size:0.9rem; margin-top:20px;">注：清除浏览器缓存可能重新计时，但尊重测试规则请勿滥用。</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        const container = document.getElementById('appContainer');
+        if (container) {
+            container.style.filter = 'blur(4px)';
+            container.style.pointerEvents = 'none';
+        }
+        const btns = document.querySelectorAll('button');
+        btns.forEach(btn => btn.disabled = true);
+    }
+
+    // ======================= 原有测试逻辑 =======================
+    const QUESTIONS = [
+        "我觉得自己内心更倾向于女性身份，而不是我出生时的男性性别。",
+        "当别人用“他”称呼我时，我会感到轻微的不适或别扭。",
+        "我渴望被他人以女性化的名字或昵称（如“姐姐”、“妹妹”）来称呼。",
+        "我希望自己的外在形象能更接近女性（如更柔和的面部、更细的腰）。",
+        "我对自己的男性性征（如喉结、体毛）感到一定程度的不满意。",
+        "穿女装（裙子、丝袜、内衣）会让我感到放松、愉悦甚至兴奋。",
+        "我幻想过以女性身份生活，并且这种幻想经常出现。",
+        "在社交场合，我常常需要压抑自己女性化的一面，这让我很累。",
+        "我会私下学习化妆、穿搭或练习女性化的声音。",
+        "我觉得“小男娘”或“跨性别女性”这类标签能部分描述我的真实感受。",
+        "我认为性别不应该限制一个人的穿着和行为，男生也可以完全少女化。",
+        "我更喜欢和女生做朋友，因为和男生相处时常觉得格格不入。",
+        "我害怕公开自己的女性化爱好，担心被歧视或嘲笑。",
+        "我希望能找到一个能完全接纳我女性化一面的伴侣或社群。",
+        "照镜子时，我常常希望看到的是一个女孩的脸。",
+        "即使没有性方面的动机，女装也让我感到心理上的满足。",
+        "我会购买或收藏可爱的女性化物品（如发饰、玩偶、裙子）。",
+        "我常常觉得自己比别人更敏感、更细腻，更像传统意义上的“女性气质”。",
+        "如果完全安全，我会愿意以女性身份在社交媒体上活动。",
+        "我对自己出生时的男性性别有一种“不对劲”或“错位”的感觉。",
+        "我渴望被当作可爱的、需要被保护的人来对待。",
+        "我对传统的男性竞争、粗犷活动（如球类、打架）毫无兴趣甚至反感。",
+        "我会在独处时尝试完全以女性身份生活（如穿女装、用女声说话）。",
+        "我希望未来的医学技术能让我拥有女性身体特征。",
+        "我认为“合格的小男娘”不是一种标准，而是一种自我接纳的勇气。",
+        "我常常在网上搜索关于男娘、跨性别、性别表达的内容。",
+        "如果得到家人朋友支持，我会更勇敢地展现自己的女性化一面。",
+        "总的来说，我觉得自己就是一只藏在男孩身体里的小雌驹（小马）。"
+    ];
+
+    let userAnswers = new Array(28).fill(null);
+
+    function renderQuestions() {
+        const container = document.getElementById('questionsContainer');
+        if (!container) return;
+        let html = '';
+        QUESTIONS.forEach((q, idx) => {
+            const selectedVal = userAnswers[idx];
+            const labels = ['1 完全不是', '2 不太符合', '3 有点符合', '4 比较符合', '5 完全符合'];
+            let optionsHtml = '';
+            for (let val = 1; val <= 5; val++) {
+                const isChecked = (selectedVal === val);
+                const selectedClass = isChecked ? 'selected' : '';
+                optionsHtml += `
+                    <div class="scale-option ${selectedClass}" data-qidx="${idx}" data-val="${val}">
+                        ${labels[val-1]}
+                    </div>
+                `;
+            }
+            html += `
+                <div class="q-card">
+                    <div class="q-text">
+                        <span class="q-num">${idx+1}</span>
+                        <span>${q}</span>
+                    </div>
+                    <div class="scale-row">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+
+        document.querySelectorAll('.scale-option').forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                const qIdx = parseInt(opt.dataset.qidx);
+                const val = parseInt(opt.dataset.val);
+                if (isNaN(qIdx)) return;
+                userAnswers[qIdx] = val;
+                const parentRow = opt.closest('.scale-row');
+                if (parentRow) {
+                    parentRow.querySelectorAll('.scale-option').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+                }
+                opt.classList.add('selected');
+                updateProgress();
+            });
+        });
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const answered = userAnswers.filter(a => a !== null).length;
+        const total = QUESTIONS.length;
+        const percent = (answered / total) * 100;
+        const progressFill = document.getElementById('progressFill');
+        if (progressFill) progressFill.style.width = percent + '%';
+        const answeredSpan = document.getElementById('answeredCount');
+        if (answeredSpan) answeredSpan.innerText = `${answered} / ${total}`;
+    }
+
+    function resetAll() {
+        userAnswers.fill(null);
+        renderQuestions();
+        const resultDiv = document.getElementById('resultArea');
+        if (resultDiv) resultDiv.style.display = 'none';
+        resultDiv.innerHTML = '';
+    }
+
+    function getResultByScore(score) {
+        if (score <= 55) {
+            return {
+                title: "🍼 萌芽小马驹 · 小男娘萌新",
+                desc: "您目前对女性化认同或表达的感受还比较弱，可能只是偶尔好奇或欣赏。没有关系，每个人的自我发现节奏不同。如果您愿意，可以从多看一些可爱的东西开始，慢慢探索内心的彩虹。",
+                emoji: "🌸🍼"
+            };
+        } else if (score <= 80) {
+            return {
+                title: "🎀 摇摆蝴蝶结 · 潜力小男娘",
+                desc: "您已经有了一些小男娘的特质，比如喜欢可爱风格、偶尔幻想女装，但可能还缺少一点勇气或更强烈的内心认同。继续倾听自己吧～ 每一次小小的尝试都是成长。",
+                emoji: "🎀✨"
+            };
+        } else if (score <= 105) {
+            return {
+                title: "💄 闪亮小甜心 · 资深小男娘",
+                desc: "恭喜！您已经是一位合格的小男娘了～ 您对女性化表达有比较强烈的向往，可能已经在私下女装或使用女性身份。您开始接纳自己的独特性，这是非常棒的一步！继续闪耀吧。",
+                emoji: "💖🦄"
+            };
+        } else if (score <= 125) {
+            return {
+                title: "👑 完美小男娘 · 公主级别",
+                desc: "哇哦！您简直就是小男娘中的模范生！女装、妆容、可爱气质样样精通，内心认同非常明确。您能比较自如地展现柔软的一面，并且开始影响身边的人。请继续保持这份自信与美丽～",
+                emoji: "👑🌈"
+            };
+        } else {
+            return {
+                title: "🌟 小男娘圣天使 · 超越定义",
+                desc: "您是传说中的圣天使级别小男娘！不仅完全拥抱女性化灵魂，还能鼓舞他人。您的存在本身就是一种魔法，性别表达已彻底自由。请用您的光芒照亮更多迷茫的小马，您是最可爱的存在！",
+                emoji: "✨🌟"
+            };
+        }
+    }
+
+    function computeAndShow() {
+        const unanswered = [];
+        for (let i = 0; i < userAnswers.length; i++) {
+            if (userAnswers[i] === null) unanswered.push(i+1);
+        }
+        if (unanswered.length > 0) {
+            alert(`💖 还有 ${unanswered.length} 道题没有回答哦～ 完成所有问题才能获得小男娘资质鉴定！\n未完成：${unanswered.slice(0,8).join(',')}${unanswered.length>8?'...':''}`);
+            return;
+        }
+
+        let totalScore = 0;
+        for (let i = 0; i < userAnswers.length; i++) {
+            totalScore += userAnswers[i];
+        }
+
+        const result = getResultByScore(totalScore);
+        const percentage = Math.round((totalScore / 140) * 100);
+
+        // 添加法律/服务声明 (用户要求的文本)
+        const noticeHtml = `
+            <div class="notice-box">
+                <p><strong>📌 注：</strong>结果解析内容仅供参考，不能作为就医或证明类凭证。</p>
+                <p><strong>💝 温馨提醒</strong><br>
+                ① 本测试为虚拟服务内容，购买成功后不可退换；<br>
+                ②  本测试题测试结果及深度解析内容仅供参考娱乐，不能作为就医或证明类凭证。</p>
+            </div>
+        `;
+
+        const resultHtml = `
+            <div class="result-title">
+                ${result.emoji} ${result.title}
+            </div>
+            <div class="spectrum">
+                🎀 小男娘指数：${totalScore} / 140 &nbsp; | &nbsp; 纯度 ${percentage}%
+            </div>
+            <div class="result-desc">
+                ${result.desc}
+                <hr style="margin: 15px 0; border-color: #ffccdd;">
+                <p style="font-size:0.9rem;">💕 记住：无论得分高低，你都是独一无二的小马。小男娘是一种可爱的自我表达，不是束缚。继续探索让自己开心的方式吧～</p>
+                <div style="background:#ffeef4; border-radius:28px; padding:12px; margin-top:12px; text-align:center;">
+                    🦄 推荐资源：小马宝莉同好会 | 男娘可爱同盟 | 跨性别友善空间
+                </div>
+                ${noticeHtml}
+            </div>
+        `;
+
+        const resultDiv = document.getElementById('resultArea');
+        if (resultDiv) {
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = resultHtml;
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function generateBackground() {
+        const bgDiv = document.getElementById('ponyBg');
+        if (!bgDiv) return;
+        bgDiv.innerHTML = '';
+        for (let i = 0; i < 12; i++) {
+            const cloud = document.createElement('div');
+            cloud.classList.add('cloud');
+            const size = 60 + Math.random() * 100;
+            cloud.style.width = size + 'px';
+            cloud.style.height = size * 0.6 + 'px';
+            cloud.style.left = Math.random() * 100 + '%';
+            cloud.style.top = Math.random() * 100 + '%';
+            cloud.style.background = `rgba(255, 250, 240, ${0.5 + Math.random() * 0.3})`;
+            cloud.style.borderRadius = '70%';
+            cloud.style.filter = 'blur(5px)';
+            bgDiv.appendChild(cloud);
+        }
+        for (let i = 0; i < 6; i++) {
+            const rain = document.createElement('div');
+            rain.classList.add('rainbow');
+            rain.style.width = 150 + Math.random() * 200 + 'px';
+            rain.style.left = Math.random() * 80 + '%';
+            rain.style.top = Math.random() * 90 + '%';
+            rain.style.opacity = 0.2 + Math.random() * 0.3;
+            rain.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+            bgDiv.appendChild(rain);
+        }
+        const starEmojis = ['🦄', '🌈', '⭐', '💖', '🎀', '🌸', '🐴'];
+        for (let i=0;i<40;i++) {
+            const star = document.createElement('div');
+            star.innerText = starEmojis[Math.floor(Math.random()*starEmojis.length)];
+            star.style.position = 'absolute';
+            star.style.fontSize = (12 + Math.random() * 28) + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = 0.2 + Math.random() * 0.5;
+            star.style.pointerEvents = 'none';
+            bgDiv.appendChild(star);
+        }
+    }
+
+    function init() {
+        if (isTestExpired()) {
+            showExpiredOverlay();
+            return;
+        }
+        renderQuestions();
+        generateBackground();
+        document.getElementById('resetBtn').addEventListener('click', resetAll);
+        document.getElementById('submitBtn').addEventListener('click', computeAndShow);
+    }
+
+    init();
+</script>
+</body>
+</html>
+```
